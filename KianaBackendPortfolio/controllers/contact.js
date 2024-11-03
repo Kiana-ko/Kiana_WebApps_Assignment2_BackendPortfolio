@@ -1,9 +1,13 @@
+
+// Responsible for importing the Contact model:
 let ContactModel = require('../models/contact');
 
+// Responsible for creating a new contact in the database:
 module.exports.createContact = async function (req, res, next) {
     try {
         let newContact = new ContactModel(req.body);
 
+         // Responsible for saving the new contact to the database:
         let result = await ContactModel.create(newContact);
         res.json(
             {
@@ -17,6 +21,7 @@ module.exports.createContact = async function (req, res, next) {
     }
 }
 
+// Responsible for retrieving all the contacts from the database:
 module.exports.getAll = async function (req, res, next) {
     try {
         let list = await ContactModel.find();
@@ -27,6 +32,8 @@ module.exports.getAll = async function (req, res, next) {
     }
 }
 
+
+// Responsible for retrieving a single contact by their ID:
 module.exports.contactByID = async function (req, res, next) {
     try {
         let id = req.params.id;
@@ -38,6 +45,7 @@ module.exports.contactByID = async function (req, res, next) {
     }
 }
 
+// Responsible for updating an existing contact by their ID:
 module.exports.updateContact = async function (req, res, next) {
     try {
         let id = req.params.id;
@@ -45,6 +53,7 @@ module.exports.updateContact = async function (req, res, next) {
         let updateContact = new ContactModel(req.body);
         updateContact._id = id;
 
+        // Responsible for updating the contact in the database:
         let result = await ContactModel.updateOne({ _id: id }, updateContact);
 
         if (result.modifiedCount > 0) {
@@ -63,10 +72,13 @@ module.exports.updateContact = async function (req, res, next) {
     }
 }
 
+
+// Responsible for removing a contact by their ID:
 module.exports.remove = async function (req, res, next) {
     try {
         let id = req.params.id;
 
+        // Responsible for deleting the contact from the database:
         let result = await ContactModel.findByIdAndDelete(id);
         if (result) {
             return res.status(404).json(

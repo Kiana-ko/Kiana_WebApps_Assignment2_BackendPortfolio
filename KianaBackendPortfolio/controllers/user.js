@@ -1,9 +1,13 @@
+
+// Responsible for importing the User model:
 let UserModel = require('../models/user');
 
+// Responsible for creating a new user in the database:
 module.exports.createUser = async function (req, res, next) {
     try {
         let newUser = new UserModel(req.body);
 
+        // Responsible for saving the new user into the database:
         let result = await UserModel.create(newUser);
         res.json(
             {
@@ -17,6 +21,7 @@ module.exports.createUser = async function (req, res, next) {
     }
 }
 
+// Responsible for retrieving all the users from the database, excluding passwords:
 module.exports.getAll = async function (req, res, next) {
     try {
         let list = await UserModel.find().select('-password');
@@ -27,6 +32,7 @@ module.exports.getAll = async function (req, res, next) {
     }
 }
 
+// Responsible for retrieving a single user by ID, excluding the password:
 module.exports.userByID = async function (req, res, next) {
     try {
         let id = req.params.id;
@@ -38,6 +44,7 @@ module.exports.userByID = async function (req, res, next) {
     }
 }
 
+// Responsible for updating an existing user by ID:
 module.exports.updateUser = async function (req, res, next) {
     try {
         let id = req.params.id;
@@ -45,6 +52,7 @@ module.exports.updateUser = async function (req, res, next) {
         let updateUser = new UserModel(req.body);
         updateUser._id = id;
 
+        // Responsible for updating the user in the database:
         let result = await UserModel.updateOne({ _id: id }, updateUser);
 
         if (result.modifiedCount > 0) {
@@ -63,10 +71,12 @@ module.exports.updateUser = async function (req, res, next) {
     }
 }
 
+// Responsible for removing a user based on their ID:
 module.exports.remove = async function (req, res, next) {
     try {
         let id = req.params.id;
 
+        // Responsible for deleting the user from the database:
         let result = await UserModel.findByIdAndDelete(id);
         if (result) {
             return res.status(404).json(
